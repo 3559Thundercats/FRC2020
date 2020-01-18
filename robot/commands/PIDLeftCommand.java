@@ -11,15 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveBaseSubsystem;
 
-public class ManualDriveCommand extends CommandBase {
+public class PIDLeftCommand extends CommandBase {
   private final DriveBaseSubsystem driveBaseSubsystem;
 
   /**
-   * Creates a new ManualDriveCommand.
-   * 
+   * Creates a new PIDLeftCommand.
    */
-
-  public ManualDriveCommand(final DriveBaseSubsystem subsystem) {
+  public PIDLeftCommand(final DriveBaseSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     driveBaseSubsystem = subsystem;
     addRequirements(subsystem);
@@ -34,15 +32,27 @@ public class ManualDriveCommand extends CommandBase {
   @Override
   public void execute() {
 
-    double leftDrive = RobotContainer.getLeftStick();
-    double rightDrive = RobotContainer.getRightStick();
-    driveBaseSubsystem.manualDrive(-leftDrive, -rightDrive);
+    int pov = RobotContainer.pov();
+
+    if(pov == 0) { //left turn
+      driveBaseSubsystem.manualDrive(-0.22, -0.22);
+    }
+    else if(pov == 180) {
+      driveBaseSubsystem.manualDrive(0.22, 0.22);
+    }
+    else if(pov == 90) {
+      driveBaseSubsystem.manualDrive(-0.22, 0.22);
+    }
+    else if(pov == 270) {
+      driveBaseSubsystem.manualDrive(0.22, -0.22);
+    }
+    
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(final boolean interrupted) {
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
